@@ -1,29 +1,79 @@
+import json
+import os
+
+import google.generativeai as genai
+from dotenv import load_dotenv
+
 from schemas.design_schema import SystemDesign
+
+load_dotenv()
+
+genai.configure(
+    api_key=os.getenv("GEMINI_API_KEY")
+)
+
+model = genai.GenerativeModel(
+    "gemini-2.5-flash"
+)
+
 
 def design_system(intent):
 
-    entities = ["User"]
+    prompt = f"""
+You are a software architect.
 
-    pages = []
+Given this application intent:
 
-    if "login" in intent.features:
-        pages.append("Login")
+{intent.model_dump_json(indent=2)}
 
-    if "dashboard" in intent.features:
-        pages.append("Dashboard")
+Return ONLY valid JSON.
 
-    if "contacts" in intent.features:
-        pages.append("Contacts")
-        entities.append("Contact")
+Format:
 
-    if "payments" in intent.features:
-        entities.append("Subscription")
+{{
+    "entities": [],
+    "pages": [],
+    "roles": []
+}}
 
-    if "analytics" in intent.features:
-        pages.append("Analytics")
+Rules:
+- Generate business entities.
+- Generate application pages.
+- Preserve roles.
+- Keep names concise.
+"""
 
-    return SystemDesign(
-        entities=list(set(entities)),
-        pages=pages,
-        roles=intent.roles
-    )
+    try:
+
+        response = model.generate_content(
+            prompt
+        )
+
+        text = response.text.strip()
+
+        if text.startswith("```json"):
+            text = text.replace(
+                "```json",
+                ""
+            ).replace(
+                "```",
+                ""
+            ).strip()
+
+        elif text.startswith("```"):
+            text = text.replace(
+                "```",
+                ""
+            ).strip()
+
+        data = json.loads(text)
+
+        return SystemDesign(**data)
+
+    except Exception:
+
+        return SystemDesign(
+            entities=["User"],
+            pages=["Dashboard"],
+            roles=intent.roles
+        )

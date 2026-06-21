@@ -1,0 +1,83 @@
+[
+  {
+    "category": "normal",
+    "prompt": "Build a CRM with login, contacts, dashboard and analytics"
+  },
+  {
+    "category": "normal",
+    "prompt": "Build a Hospital Management System with doctors, patients, appointments and billing"
+  },
+  {
+    "category": "normal",
+    "prompt": "Build a Learning Management System with students, teachers, assignments and exams"
+  },
+  {
+    "category": "normal",
+    "prompt": "Build an Inventory Management System with products, suppliers and stock tracking"
+  },
+  {
+    "category": "normal",
+    "prompt": "Build an E-Commerce platform with products, cart, orders and payments"
+  },
+  {
+    "category": "normal",
+    "prompt": "Build an HRMS with employees, attendance and payroll"
+  },
+  {
+    "category": "normal",
+    "prompt": "Build a Food Delivery platform with restaurants, orders and payments"
+  },
+  {
+    "category": "normal",
+    "prompt": "Build an Event Management System with events, tickets and registrations"
+  },
+  {
+    "category": "normal",
+    "prompt": "Build a Hotel Booking platform with rooms, reservations and payments"
+  },
+  {
+    "category": "normal",
+    "prompt": "Build a Helpdesk System with tickets, agents and reporting"
+  },
+
+  {
+    "category": "edge",
+    "prompt": "Build a platform"
+  },
+  {
+    "category": "edge",
+    "prompt": "Build something for schools"
+  },
+  {
+    "category": "edge",
+    "prompt": "No login but role based access"
+  },
+  {
+    "category": "edge",
+    "prompt": "Payments without users"
+  },
+  {
+    "category": "edge",
+    "prompt": "Build an enterprise application"
+  },
+  {
+    "category": "edge",
+    "prompt": "Create a system with dashboards but no data storage"
+  },
+  {
+    "category": "edge",
+    "prompt": "Build a marketplace for everything"
+  },
+  {
+    "category": "edge",
+    "prompt": "Users should access admin features without authentication"
+  },
+  {
+    "category": "edge",
+    "prompt": "Build a healthcare platform with maximum security"
+  },
+  {
+    "category": "edge",
+    "prompt": "Build an app"
+  }
+]

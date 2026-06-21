@@ -22,19 +22,23 @@ def execute_db_schema(db_schema):
 
         created_tables.append(table.name)
 
-    cursor.execute(
-        "SELECT name FROM sqlite_master WHERE type='table';"
-    )
-
-    existing_tables = [
-        row[0]
-        for row in cursor.fetchall()
-    ]
+    verified_tables = []
+    for table in created_tables:
+        cursor.execute(
+            f"""
+            SELECT name
+            FROM sqlite_master
+            WHERE type='table'
+            AND name='{table}'
+            """
+        )
+        if cursor.fetchone():
+            verified_tables.append(table)
 
     conn.commit()
     conn.close()
 
     return {
         "created": created_tables,
-        "verified": existing_tables
+        "verified": verified_tables
     }

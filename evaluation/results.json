@@ -1,0 +1,8 @@
+{
+    "total_prompts": 20,
+    "successful_generations": 20,
+    "failed_generations": 0,
+    "repairs_needed": 0,
+    "success_rate": 100.0,
+    "avg_latency_seconds": 0.0001
+}

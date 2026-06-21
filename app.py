@@ -6,8 +6,16 @@ from pipeline.system_designer import design_system
 from pipeline.schema_generator import generate_schemas
 from pipeline.validator import validate_schemas
 from pipeline.runtime import execute_db_schema
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 class PromptRequest(BaseModel):
