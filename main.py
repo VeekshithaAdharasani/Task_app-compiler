@@ -1,9 +1,11 @@
+import os
 from pipeline.intent_extractor import extract_intent
 from pipeline.system_designer import design_system
 from pipeline.schema_generator import generate_schemas
 from pipeline.validator import validate_schemas
 from pipeline.repair_engine import repair_schemas
 from pipeline.runtime import execute_db_schema
+from pipeline.code_generator import generate_backend_code
 
 prompt = """
 Build a CRM with login,
@@ -87,3 +89,21 @@ result = execute_db_schema(
 
 print("Execution Result:")
 print(result)
+
+backend_code = generate_backend_code(
+    schemas["api"]
+)
+
+os.makedirs(
+    "outputs",
+    exist_ok=True
+)
+
+with open(
+    "outputs/generated_backend.py",
+    "w",
+    encoding="utf-8"
+) as f:
+    f.write(backend_code)
+
+print("\nBACKEND GENERATED")
