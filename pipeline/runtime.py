@@ -11,10 +11,22 @@ def execute_db_schema(db_schema):
 
     for table in db_schema.tables:
 
+        columns_sql = []
+
+        for column in table.columns:
+
+            if column == "id":
+                columns_sql.append(
+                    "id INTEGER PRIMARY KEY"
+                )
+            else:
+                columns_sql.append(
+                    f"{column} TEXT"
+                )
+
         query = f"""
         CREATE TABLE IF NOT EXISTS {table.name} (
-            id INTEGER PRIMARY KEY,
-            name TEXT
+            {', '.join(columns_sql)}
         )
         """
 
@@ -22,23 +34,19 @@ def execute_db_schema(db_schema):
 
         created_tables.append(table.name)
 
-    verified_tables = []
-    for table in created_tables:
-        cursor.execute(
-            f"""
-            SELECT name
-            FROM sqlite_master
-            WHERE type='table'
-            AND name='{table}'
-            """
-        )
-        if cursor.fetchone():
-            verified_tables.append(table)
+    cursor.execute(
+        "SELECT name FROM sqlite_master WHERE type='table';"
+    )
+
+    existing_tables = [
+        row[0]
+        for row in cursor.fetchall()
+    ]
 
     conn.commit()
     conn.close()
 
     return {
         "created": created_tables,
-        "verified": verified_tables
+        "verified": existing_tables
     }

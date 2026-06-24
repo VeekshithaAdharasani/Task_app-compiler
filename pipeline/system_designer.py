@@ -69,11 +69,39 @@ Rules:
         data = json.loads(text)
 
         return SystemDesign(**data)
-
+    
     except Exception:
-
+        entities = ["User"]
+        pages = []
+        feature_text = " ".join(
+            intent.features
+        ).lower()
+        
+        if (
+            "login" in feature_text
+            or "authentication" in feature_text
+        ):
+            pages.append("Login")
+        
+        if "dashboard" in feature_text:
+            pages.append("Dashboard")
+        
+        if "contact" in feature_text:
+            pages.append("Contacts")
+            entities.append("Contact")
+        
+        if (
+            "payment" in feature_text
+            or "subscription" in feature_text
+            or "premium" in feature_text
+        ):
+            entities.append("Subscription")
+            
+        if "analytics" in feature_text:
+            pages.append("Analytics")
+        
         return SystemDesign(
-            entities=["User"],
-            pages=["Dashboard"],
+            entities=list(set(entities)),
+            pages=pages,
             roles=intent.roles
-        )
+            )

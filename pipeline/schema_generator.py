@@ -4,6 +4,63 @@ from schemas.db_schema import DBSchema, Table
 from schemas.auth_schema import AuthSchema
 
 
+ENTITY_COLUMNS = {
+    "user": [
+        "id",
+        "name",
+        "email"
+    ],
+
+    "doctor": [
+        "id",
+        "name",
+        "specialization",
+        "email"
+    ],
+
+    "patient": [
+        "id",
+        "name",
+        "age",
+        "phone"
+    ],
+
+    "appointment": [
+        "id",
+        "doctor_id",
+        "patient_id",
+        "appointment_date"
+    ],
+
+    "bill": [
+        "id",
+        "patient_id",
+        "amount",
+        "status"
+    ],
+
+    "service": [
+        "id",
+        "service_name",
+        "price"
+    ],
+
+    "contact": [
+        "id",
+        "name",
+        "email",
+        "phone"
+    ],
+
+    "subscription": [
+        "id",
+        "plan_name",
+        "price",
+        "status"
+    ]
+}
+
+
 def generate_schemas(design):
 
     ui = UISchema(
@@ -24,19 +81,36 @@ def generate_schemas(design):
 
         table_name = entity.lower()
 
+        columns = ENTITY_COLUMNS.get(
+            table_name,
+            ["id", "name"]
+        )
+
         db_tables.append(
             Table(
                 name=table_name,
-                columns=["id", "name"]
+                columns=columns
             )
         )
 
-        api_endpoints.append(
+        api_endpoints.extend([
             Endpoint(
                 path=f"/api/{table_name}",
                 method="GET"
+            ),
+            Endpoint(
+                path=f"/api/{table_name}",
+                method="POST"
+            ),
+            Endpoint(
+                path=f"/api/{table_name}/{{id}}",
+                method="PUT"
+            ),
+            Endpoint(
+                path=f"/api/{table_name}/{{id}}",
+                method="DELETE"
             )
-        )
+        ])
 
     api = APISchema(
         endpoints=api_endpoints

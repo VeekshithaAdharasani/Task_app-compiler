@@ -16,7 +16,6 @@ model = genai.GenerativeModel(
     "gemini-2.5-flash"
 )
 
-
 def extract_intent(user_prompt: str):
 
     prompt = f"""
@@ -42,16 +41,62 @@ User Request:
 {user_prompt}
 """
 
-    response = model.generate_content(prompt)
+    try:
 
-    text = response.text.strip()
+        response = model.generate_content(prompt)
 
-    if text.startswith("```json"):
-        text = text.replace("```json", "").replace("```", "").strip()
+        text = response.text.strip()
 
-    elif text.startswith("```"):
-        text = text.replace("```", "").strip()
+        if text.startswith("```json"):
+            text = text.replace(
+                "```json",
+                ""
+            ).replace(
+                "```",
+                ""
+            ).strip()
 
-    data = json.loads(text)
+        elif text.startswith("```"):
+            text = text.replace(
+                "```",
+                ""
+            ).strip()
 
-    return AppIntent(**data)
+        data = json.loads(text)
+
+        return AppIntent(**data)
+
+    except Exception as e:
+        print("FALLBACK ACTIVATED")
+        print("Gemini Error:", e)
+        print("Using Fallback Extractor")
+
+        prompt_lower = user_prompt.lower()
+
+        features = []
+
+        if "login" in prompt_lower:
+            features.append("login")
+
+        if "dashboard" in prompt_lower:
+            features.append("dashboard")
+
+        if "contact" in prompt_lower:
+            features.append("contacts")
+
+        if "payment" in prompt_lower:
+            features.append("payments")
+
+        if "analytics" in prompt_lower:
+            features.append("analytics")
+
+        roles = ["user"]
+
+        if "admin" in prompt_lower:
+            roles.append("admin")
+
+        return AppIntent(
+            app_type="CRM",
+            features=features,
+            roles=roles
+        )
